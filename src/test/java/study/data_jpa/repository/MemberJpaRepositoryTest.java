@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.data_jpa.entity.Member;
 
+import java.util.List;
+
 @SpringBootTest
 @Transactional
 class MemberJpaRepositoryTest {
@@ -26,5 +28,7 @@ class MemberJpaRepositoryTest {
 
 
     }
+
+
 
 }

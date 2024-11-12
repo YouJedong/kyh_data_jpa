@@ -7,4 +7,5 @@ import study.data_jpa.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
+
 }

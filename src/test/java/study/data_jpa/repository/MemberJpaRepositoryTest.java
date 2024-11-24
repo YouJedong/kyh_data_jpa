@@ -29,6 +29,23 @@ class MemberJpaRepositoryTest {
 
     }
 
+    @Test
+    public void findByPage() {
+        Member member1 = new Member("you jedong");
+        member1.setAge(11);
+        Member member2 = new Member("you jedong2");
+        member2.setAge(11);
+        Member savedMember1 = memberRepository.save(member1);
+        Member savedMember2 = memberRepository.save(member2);
+
+        List<Member> members = memberRepository.findByPage(11, 0, 1);
+        long cnt = memberRepository.findByPageCnt(11);
+        for (Member member : members) {
+            System.out.println("member = " + member);
+        }
+        System.out.println("cnt = " + cnt);
+
+    }
 
 
 }

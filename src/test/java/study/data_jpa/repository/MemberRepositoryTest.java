@@ -1,5 +1,7 @@
 package study.data_jpa.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ class MemberRepositoryTest {
     @Autowired MemberRepository memberRepository;
 
     @Autowired TeamRepository teamRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     public void testMember() {
@@ -206,5 +211,44 @@ class MemberRepositoryTest {
 
     }
 
+    @Test
+    public void bulkAgePlus() {
+        memberRepository.save(new Member("you jedong0", 9));
+        memberRepository.save(new Member("you jedong1", 10));
+        memberRepository.save(new Member("you jedong2", 20));
+        memberRepository.save(new Member("you jedong3", 30));
+        memberRepository.save(new Member("you jedong4", 40));
+        memberRepository.save(new Member("you jedong5", 50));
+
+        int resultCnt = memberRepository.bulkAgePlus(10);
+        System.out.println("resultCnt = " + resultCnt);
+        //em.flush();
+        // em.clear();
+
+        List<Member> Members = memberRepository.findAll();
+        for (Member member : Members) {
+            System.out.println("member = " + member);
+        }
+
+    }
+
+    @Test
+    public void findMemberLazy() {
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+
+        Member member1 = new Member("Member1", 10, team1);
+        Member member2 = new Member("Member2", 20, team2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<Member> members = memberRepository.findAll();
+        for (Member member : members) {
+            System.out.println("member = " + member);
+        }
+
+    }
 
 }

@@ -47,5 +47,21 @@ class MemberJpaRepositoryTest {
 
     }
 
+    @Test
+    public void bulkAgePlus() {
+        memberRepository.save(new Member("you jedong0", 9));
+        memberRepository.save(new Member("you jedong1", 10));
+        memberRepository.save(new Member("you jedong2", 20));
+        memberRepository.save(new Member("you jedong3", 30));
+        memberRepository.save(new Member("you jedong4", 40));
+        memberRepository.save(new Member("you jedong5", 50));
+
+        int resultCnt = memberRepository.bulkAgePlus(10);
+        System.out.println("resultCnt = " + resultCnt);
+
+
+
+    }
+
 
 }

@@ -251,4 +251,24 @@ class MemberRepositoryTest {
 
     }
 
+    @Test
+    public void queryHint() {
+        Member member = new Member("member1", 10);
+        memberRepository.save(member);
+        em.flush();
+        em.clear();
+
+        List<Member> members = memberRepository.findReadOnlyByUsername("member1");
+        Member findMember = members.get(0);
+        findMember.setUsername("hahahaha");
+
+
+    }
+
+    @Test
+    public void callCustom() {
+
+        List<Member> memberCustom = memberRepository.findMemberCustom();
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import study.data_jpa.dto.MemberDto;
 import study.data_jpa.entity.Member;
+import study.data_jpa.entity.MemberProjection;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,5 +53,16 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
     List<Member> findReadOnlyByUsername(String username);
+
+    List<NestedClosedProjections> findProjectionsByUsername(@Param("username") String username);
+
+    @Query(value = "select * from member where username = ?", nativeQuery = true)
+    Member findByNativeQuery(String username);
+
+    @Query(value = "select m.member_id as id, m.username, t.name as teamName " +
+            "from member m left join team t",
+            countQuery = "select count(*) from member",
+            nativeQuery = true)
+    Page<MemberProjection> findByNativeProjection(Pageable pageable);
 }
 

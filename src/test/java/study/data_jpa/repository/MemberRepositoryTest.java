@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.data_jpa.dto.MemberDto;
 import study.data_jpa.entity.Member;
+import study.data_jpa.entity.MemberProjection;
 import study.data_jpa.entity.Team;
 
 import java.util.ArrayList;
@@ -269,6 +270,51 @@ class MemberRepositoryTest {
     public void callCustom() {
 
         List<Member> memberCustom = memberRepository.findMemberCustom();
+    }
+
+    @Test
+    public void projections() {
+        Team temaA = new Team("teamA");
+        em.persist(temaA);
+
+        Member m1 = new Member("m1", 0, temaA);
+        Member m2 = new Member("m2", 0, temaA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        List<NestedClosedProjections> result = memberRepository.findProjectionsByUsername("m1");
+
+        for (NestedClosedProjections nestedClosedProjections : result) {
+            System.out.println("nestedClosedProjections = " + nestedClosedProjections.getUsername());
+            System.out.println("nestedClosedProjections.getTeam().getName() = " + nestedClosedProjections.getTeam().getName());
+        }
+    }
+
+    @Test
+    public void nativeQuery() {
+        Team temaA = new Team("teamA");
+        em.persist(temaA);
+
+        Member m1 = new Member("m1", 0, temaA);
+        Member m2 = new Member("m2", 0, temaA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        Page<MemberProjection> result = memberRepository.findByNativeProjection(PageRequest.of(0,10));
+
+        List<MemberProjection> resultList = result.getContent();
+
+        for (MemberProjection memberProjection : resultList) {
+            System.out.println("memberProjection.getUsername() = " + memberProjection.getUsername());
+            System.out.println("memberProjection.getTeamName() = " + memberProjection.getTeamName());
+        }
+
     }
 
 }
